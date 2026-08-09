@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}رزرو ثبت شد | قرارِ خوب{% endblock %}
+{% block content %}
+<section class="success-page">
+  <div class="success-icon">✓</div>
+  <p class="eyebrow">ثبت موفق</p>
+  <h1>قرار شما رزرو شد!</h1>
+  <p>زمان انتخابی شما در سامانه ثبت شده است.</p>
+  <div class="reservation-detail"><span>تاریخ</span><strong>{{ selected_date }}</strong><span>ساعت</span><strong>{{ selected_time }}</strong></div>
+  <a class="submit back" href="{{ url_for('home') }}">رزرو جدید</a>
+</section>
+{% endblock %}

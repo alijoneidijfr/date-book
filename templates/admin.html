@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}مدیریت رزروها{% endblock %}
+{% block content %}
+<section class="admin-page">
+  <div class="admin-heading"><div><p class="eyebrow">مدیریت</p><h1>رزروهای ثبت‌شده</h1></div><a href="{{ url_for('home') }}">بازگشت به سایت</a></div>
+  {% if bookings %}
+  <div class="table-wrap"><table><thead><tr><th>نام</th><th>تماس</th><th>تاریخ</th><th>ساعت</th><th>توضیحات</th><th></th></tr></thead>
+  <tbody>{% for booking in bookings %}<tr><td>{{ booking.full_name }}</td><td>{{ booking.phone }}</td><td>{{ booking.selected_date }}</td><td>{{ booking.selected_time }}</td><td>{{ booking.note or '—' }}</td><td><form method="post" action="{{ url_for('delete_booking', booking_id=booking.id) }}"><button class="delete">حذف</button></form></td></tr>{% endfor %}</tbody></table></div>
+  {% else %}<div class="empty">هنوز رزروی ثبت نشده است.</div>{% endif %}
+</section>
+{% endblock %}

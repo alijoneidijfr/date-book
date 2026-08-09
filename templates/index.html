@@ -1,1 +1,51 @@
+{% extends "base.html" %}
+{% block title %}رزرو قرار | قرارِ خوب{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">یک قرار، یک خاطره</p>
+    <h1>روز و ساعت<br><em>قرارِ خودت</em> را انتخاب کن.</h1>
+    <p class="intro">زمانی را که برایتان مناسب است انتخاب کنید؛ رزرو شما در چند ثانیه ثبت می‌شود.</p>
+    <div class="features"><span>✓ انتخاب سریع</span><span>✓ تأیید فوری</span><span>✓ رایگان</span></div>
+  </div>
 
+  <form class="booking-card" method="post">
+    <div class="card-heading"><span class="step">۱</span><div><h2>رزرو قرار</h2><p>زمان مناسب را انتخاب کنید</p></div></div>
+
+    <label class="label">انتخاب روز</label>
+    <div class="date-grid">
+      {% for day in dates %}
+      <label class="date-option">
+        <input type="radio" name="selected_date" value="{{ day.isoformat() }}" {% if selected_date == day.isoformat() %}checked{% endif %}>
+        <span><b>{{ day.strftime('%d') }}</b><small>{{ day.strftime('%b') }}</small></span>
+      </label>
+      {% endfor %}
+    </div>
+
+    <label class="label time-label">انتخاب ساعت</label>
+    <div class="time-grid">
+      {% for slot in slots %}
+        {% set key = selected_date ~ '|' ~ slot %}
+        <label class="time-option {% if key in booked_slots %}disabled{% endif %}">
+          <input type="radio" name="selected_time" value="{{ slot }}" {% if selected_time == slot %}checked{% endif %} {% if key in booked_slots %}disabled{% endif %}>
+          <span>{{ slot }} {% if key in booked_slots %}<small>رزرو شده</small>{% endif %}</span>
+        </label>
+      {% endfor %}
+    </div>
+
+    <div class="form-row">
+      <div><label for="full_name">نام و نام خانوادگی</label><input id="full_name" name="full_name" placeholder="مثلاً سارا احمدی" required></div>
+      <div><label for="phone">شماره تماس</label><input id="phone" name="phone" inputmode="tel" placeholder="0912..." required></div>
+    </div>
+    <label for="note">توضیحات <small>(اختیاری)</small></label>
+    <textarea id="note" name="note" rows="2" placeholder="مثلاً ترجیح می‌دهم فضای باز باشد."></textarea>
+    <button class="submit" type="submit">ثبت رزرو <span>←</span></button>
+    <p class="privacy">با ثبت رزرو، اطلاعات شما فقط برای هماهنگی این قرار استفاده می‌شود.</p>
+  </form>
+</section>
+
+<script>
+  // با تغییر روز، برای به‌روزرسانی وضعیت ساعت‌های رزرو شده، فرم را دوباره ارسال نمی‌کنیم.
+  // این دمو ساعات رزروشده‌ی تاریخ اولیه را نمایش می‌دهد؛ رزرو نهایی در سرور اعتبارسنجی می‌شود.
+</script>
+{% endblock %}
