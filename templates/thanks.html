@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}قرارمون ثبت شد{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="card romantic-card success-card">
+        <div class="success-icon">💖</div>
+        <div class="badge">همه‌چیز آماده است</div>
+        <h1>قرارمون ثبت شد!</h1>
+        <p>منتظر دیدنت هستم 🌸</p>
+
+        <ul class="details-list">
+            <li>📅 تاریخ: <strong>{{ date }}</strong> {% if weekday %}_ <strong>{{ weekday }}</strong>{% endif %}</li>
+            <li>⏰ ساعت: <strong>{{ time }}</strong></li>
+            <li>☕ کافه: <strong>{{ cafe_name }}</strong></li>
+            <li>📍 محله: <strong>{{ cafe_area }}</strong></li>
+        </ul>
+
+        <div class="contact-box" style="text-align: center; background: rgba(255, 240, 247, 0.9); padding: 25px; border-radius: 20px; border: 1px solid #f8bbd0;">
+            <p style="font-size: 1.2rem; color: var(--pink-dark); font-weight: 800;">راه ارتباطی با من</p>
+            <p class="phone" style="margin: 15px 0; font-size: 1.4rem; color: #880e4f; font-weight: 900; letter-spacing: 1px;">+989905991102</p>
+            
+            <p style="font-size: 0.9rem; color: var(--muted); line-height: 1.8;">
+                خوشحال می‌شم اگر مایل بودی، توی اینستاگرام همراه من باشی و<br>صفحه‌ام را دنبال کنی 🌸
+            </p>
+            
+            <a
+                href="https://www.instagram.com/a_joneidi.jfr/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="instagram"
+                style="margin-top: 15px; font-size: 1.1rem; font-weight: 800; color: var(--pink-dark); text-decoration: none; cursor: pointer;"
+            >
+                @a_joneidi.jfr
+            </a>
+        </div>
+
+        <p style="font-size: 0.9rem; color: var(--muted); margin-top: 25px; display: block; text-align: center;">🌸 ممنون از همراهی‌ات</p>
+        
+        <button
+            type="button"
+            class="yes-btn full-width"
+            onclick="closePage()"
+        >
+            بازگشت به خانه
+        </button>
+    </div>
+</div>
+
+<script>
+function closePage() {
+    window.close();
+
+    setTimeout(function () {
+        window.location.replace("about:blank");
+    }, 150);
+}
+</script>
+
+{% endblock %}

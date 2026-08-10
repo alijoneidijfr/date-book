@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}انتخاب تاریخ و ساعت{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="card romantic-card">
+        <div class="heart">🥰</div>
+
+        <div class="badge">حالا زمانش رو انتخاب کنیم</div>
+
+        <h1>خیلی خوشحال شدم که قبول کردی!</h1>
+
+        <p class="subtitle">
+            چه روز و ساعتی برات بهتره؟
+        </p>
+
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="{{ url_for('arrange') }}" method="POST">
+            <div class="form-group">
+                <label>
+                    تاریخ قرار <span class="required-mark">*</span>
+                </label>
+
+                <!-- این input مقدار انتخاب‌شده را برای Flask ارسال می‌کند -->
+                <input
+                    type="hidden"
+                    name="date"
+                    id="selected_date"
+                    required
+                >
+
+                <div class="date-table-wrapper">
+                    <table class="date-table">
+                        <tbody>
+                            {% for row_start in range(0, dates|length, 7) %}
+                            <tr>
+                                {% for item in dates[row_start:row_start + 7] %}
+                                <td>
+                                    <button type="button" class="date-btn"
+                                            data-date="{{ item.value }}"
+                                            aria-pressed="false">
+                                        <span>{{ item.day }}</span>
+                                        <small>{{ item.month }}</small>
+                                    </button>
+                                </td>
+                                {% endfor %}
+                                {% for _ in range(7 - (dates[row_start:row_start + 7]|length)) %}
+                                <td></td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <p id="date-help" class="date-help">
+                        لطفاً یک تاریخ را انتخاب کن 💗
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="time_input">
+                    ساعت قرار <span class="required-mark">*</span>
+                </label>
+
+                <select id="time_input" name="time" required>
+                    <option value="" disabled selected>
+                        ساعت را انتخاب کن
+                    </option>
+                    {% for time in time_options %}
+                    <option value="{{ time }}">{{ time }}</option>
+                    {% if time == '11:00' %}
+                    <option value="" disabled>---</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="yes-btn full-width">
+                مرحله بعد: پیشنهاد کافه ☕
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .date-table-wrapper {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .date-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 6px;
+        direction: rtl;
+    }
+
+    .date-table td {
+        width: 14.28%;
+        padding: 0;
+    }
+
+    .date-btn {
+        width: 100%;
+        min-height: 68px;
+        padding: 8px 3px;
+        border: 2px solid #f4b6cc;
+        border-radius: 14px;
+        background: #fff8fb;
+        color: #8b315b;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s ease;
+    }
+
+    .date-btn span {
+        display: block;
+        font-size: 1.15rem;
+        font-weight: 900;
+        line-height: 1.4;
+    }
+
+    .date-btn small {
+        display: block;
+        margin-top: 3px;
+        font-size: 0.68rem;
+        color: #b56b89;
+        white-space: nowrap;
+    }
+
+    .date-btn:hover {
+        background: #ffe5ef;
+        border-color: #e889aa;
+        transform: translateY(-2px);
+    }
+
+    .date-btn.selected {
+        background: #e91e63;
+        border-color: #c2185b;
+        color: white;
+        box-shadow: 0 5px 12px rgba(233, 30, 99, 0.25);
+    }
+
+    .date-btn.selected small {
+        color: white;
+    }
+
+    .date-help {
+        margin: 10px 0 0;
+        text-align: center;
+        color: #a45b79;
+        font-size: 0.85rem;
+    }
+
+    .date-help.success {
+        color: #c2185b;
+        font-weight: 800;
+    }
+
+    @media (max-width: 480px) {
+        .date-table {
+            border-spacing: 3px;
+        }
+
+        .date-btn {
+            min-height: 61px;
+            padding: 5px 1px;
+            border-radius: 10px;
+        }
+
+        .date-btn span {
+            font-size: 0.95rem;
+        }
+
+        .date-btn small {
+            font-size: 0.56rem;
+        }
+    }
+
+    /* اطمینان از اینکه تقویم زیر کارت‌ها نمی‌رود */
+    .jdp-container {
+        z-index: 10000 !important;
+    }
+    #date_input {
+        cursor: pointer;
+        background-color: #fff !important;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dateButtons = document.querySelectorAll(".date-btn");
+        const selectedDateInput = document.getElementById("selected_date");
+        const dateHelp = document.getElementById("date-help");
+
+        dateButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                dateButtons.forEach(function (item) {
+                    item.classList.remove("selected");
+                    item.removeAttribute("aria-pressed");
+                });
+
+                button.classList.add("selected");
+                button.setAttribute("aria-pressed", "true");
+
+                selectedDateInput.value = button.dataset.date;
+
+                dateHelp.textContent =
+                    "تاریخ انتخاب‌شده: " + button.innerText.replace(/\n/g, " ");
+
+                dateHelp.classList.add("success");
+            });
+        });
+    });
+</script>
+{% endblock %}

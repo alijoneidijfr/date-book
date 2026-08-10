@@ -1,29 +1,42 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}مدیریت رزروها{% endblock %}
+
 {% block content %}
-<div class="card" style="max-width: 800px;">
-    <h1>لیست رزروها</h1>
-    <a href="/logout" style="color: #94a3b8;">خروج</a>
-    <table>
-        <thead>
-            <tr>
-                <th>نام</th>
-                <th>تماس</th>
-                <th>تاریخ</th>
-                <th>ساعت</th>
-                <th>عملیات</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for b in bookings %}
-            <tr>
-                <td>{{ b.name }}</td>
-                <td>{{ b.phone }}</td>
-                <td>{{ b.date }}</td>
-                <td>{{ b.time }}</td>
-                <td><a href="/delete/{{ b.id }}" class="delete-btn" onclick="return confirm('حذف شود؟')">حذف</a></td>
-            </tr>
+<div class="hero">
+    <div class="card romantic-card">
+        <div class="badge">پنل مدیریت</div>
+        <h1>لیست رزروها</h1>
+
+        <form action="{{ url_for('admin_logout') }}" method="post" style="margin-bottom: 20px;">
+            <button class="secondary-button" type="submit">خروج</button>
+        </form>
+
+        {% if bookings %}
+        <div class="admin-list">
+            {% for booking in bookings %}
+            <div class="booking-card" style="background: rgba(255,255,255,0.8); border: 1px solid #f3c1d3; border-radius: 18px; padding: 18px; margin-bottom: 14px;">
+                <p><strong>نام کافه:</strong> {{ booking.name }}</p>
+                <p><strong>تاریخ:</strong> {{ booking.booking_date }}</p>
+                <p><strong>ساعت:</strong> {{ booking.booking_time }}</p>
+                <p><strong>شماره:</strong> {{ booking.phone }}</p>
+                <p><strong>محله:</strong> {{ booking.cafe_area }}</p>
+                <p><strong>زمان ثبت:</strong> {{ booking.created_at }}</p>
+                {% if booking.latitude and booking.longitude %}
+                <p><strong>لوکیشن:</strong> <a href="https://www.openstreetmap.org/?mlat={{ booking.latitude }}&mlon={{ booking.longitude }}#map=16/{{ booking.latitude }}/{{ booking.longitude }}" target="_blank" rel="noopener noreferrer">مشاهده روی نقشه</a></p>
+                {% else %}
+                <p><strong>لوکیشن:</strong> انتخاب نشده</p>
+                {% endif %}
+
+                <form action="{{ url_for('delete_booking', booking_id=booking.id) }}" method="post" onsubmit="return confirm('این رزرو حذف شود؟');">
+                    <button class="delete-button" type="submit">حذف</button>
+                </form>
+            </div>
             {% endfor %}
-        </tbody>
-    </table>
+        </div>
+        {% else %}
+        <p>هنوز رزروی ثبت نشده است.</p>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

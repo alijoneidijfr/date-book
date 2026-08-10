@@ -1,12 +1,11 @@
 {% extends "base.html" %}
-{% block title %}رزرو ثبت شد | قرارِ خوب{% endblock %}
+{% block title %}رزرو ثبت شد{% endblock %}
 {% block content %}
-<section class="success-page">
+<section class="booking-card success-card fade-in">
   <div class="success-icon">✓</div>
-  <p class="eyebrow">ثبت موفق</p>
-  <h1>قرار شما رزرو شد!</h1>
-  <p>زمان انتخابی شما در سامانه ثبت شده است.</p>
-  <div class="reservation-detail"><span>تاریخ</span><strong>{{ selected_date }}</strong><span>ساعت</span><strong>{{ selected_time }}</strong></div>
-  <a class="submit back" href="{{ url_for('home') }}">رزرو جدید</a>
+  <div class="brand">رزرو ثبت شد</div>
+  <h1>{{ name }}، قرار تو ثبت شد</h1>
+  <p class="lead">زمان انتخاب‌شده: <strong>{{ booking_date }}</strong>، ساعت <strong>{{ booking_time }}</strong></p>
+  <a class="primary-button link-button" href="{{ url_for('index') }}">بازگشت به صفحه اصلی</a>
 </section>
 {% endblock %}

@@ -1,32 +1,129 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}یک سؤال مهم{% endblock %}
 
 {% block content %}
-<div class="card animate-fade-in">
-    <div class="badge">رزرو آنلاین دیت</div>
-    <h1>برنامه‌ریزی برای یک شب خاص</h1>
-    <p>لطفاً اطلاعات خود و زمان مورد نظرتان را وارد کنید.</p>
+<div class="hero">
+    <div class="card romantic-card">
+        <div class="heart">💗</div>
 
-    <form action="/book" method="POST" class="booking-form">
-        <input type="text" name="name" placeholder="نام و نام خانوادگی" required>
-        <input type="text" name="phone" placeholder="شماره تماس" required>
-        
-        <div class="datetime-group">
-            <input type="text" id="pdatepicker" name="date" placeholder="انتخاب روز (شمسی)" required readonly>
-            <input type="time" name="time" min="16:00" max="22:00" required>
+        <div class="badge">یک دعوت خاص</div>
+
+        <h1>با من میای سرِ قرار؟</h1>
+
+        <p class="subtitle">
+            یه قرار قشنگ می‌تونه شروع یه خاطره قشنگ‌تر باشه :)
+        </p>
+
+        <div class="button-row">
+            <button id="yesBtn" class="yes-btn" type="button">
+                بله 💕
+            </button>
+
+            <button id="noBtn" class="no-btn" type="button">
+                نه
+            </button>
         </div>
-        <small style="color: #94a3b8; display: block; margin-bottom: 15px;">ساعات مجاز: ۱۶:۰۰ الی ۲۲:۰۰</small>
 
-        <button type="submit" class="button btn-block">تأیید و ثبت رزرو</button>
-    </form>
+        <p id="message" class="message"></p>
+    </div>
 </div>
 
-<!-- اسکریپت تقویم شمسی -->
-<link rel="stylesheet" href="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
-<script src="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
 <script>
-    jalaliDatepicker.startWatch();
-    document.getElementById("pdatepicker").addEventListener("click", function(){
-        jalaliDatepicker.show(this);
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const message = document.getElementById("message");
+
+    let yesScale = 1;
+    let noCount = 0;
+
+    const messages = [
+        "یه بار دیگه فکر کن 😌",
+        "مطمئنی؟ قرارمون می‌تونه خیلی خوب بشه 💗",
+        "بله داره بزرگ‌تر می‌شه 🙂",
+        "فکر کنم ته دلت می‌خوای بگی بله!",
+        "دیگه انتخاب خیلی آسونه 💕"
+    ];
+
+    noBtn.addEventListener("click", function () {
+        noCount++;
+
+        // منطق بزرگ شدن دکمه بله (بدون تغییر)
+        yesScale = Math.min(1 + noCount * 0.18, 3.2);
+        yesBtn.style.transform = `scale(${yesScale})`;
+
+        // منطق کوچک شدن و محو شدن دکمه نه (بدون تغییر)
+        noBtn.style.transform = `scale(${Math.max(
+            1 - noCount * 0.08,
+            0.65
+        )})`;
+
+        noBtn.style.opacity = Math.max(
+            1 - noCount * 0.1,
+            0.45
+        );
+
+        message.textContent =
+            messages[Math.min(noCount - 1, messages.length - 1)];
+
+        if (noCount >= 8) {
+            noBtn.textContent = "شاید بله؟";
+        }
+    });
+
+    yesBtn.addEventListener("click", function () {
+        window.location.href = "{{ url_for('arrange') }}";
     });
 </script>
+
+<style>
+    /* ظاهر دکمه نه مطابق عکس اول */
+    .button-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+        position: relative;
+    }
+
+    .yes-btn {
+        min-width: 140px;
+        z-index: 10;
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .no-btn {
+        min-width: 58px;
+        padding: 8px 16px;
+        background: #f8f8f8;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        cursor: pointer;
+        color: #666;
+        font-family: inherit;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        transform-origin: center;
+    }
+
+    .no-btn:hover {
+        background: #f0f0f0;
+        border-color: #ccc;
+    }
+
+    .message {
+        margin-top: 25px;
+        font-size: 0.95rem;
+        color: var(--pink-dark);
+        min-height: 24px;
+        font-weight: 600;
+    }
+
+    @media (max-width: 420px) {
+        .button-row {
+            gap: 10px;
+        }
+    }
+</style>
 {% endblock %}

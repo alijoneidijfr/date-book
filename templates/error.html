@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}صفحه پیدا نشد{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="card romantic-card">
+        <div class="heart">😕</div>
+
+        <h1>صفحه پیدا نشد</h1>
+
+        <p class="subtitle">
+            {{ message }}
+        </p>
+
+        <a class="yes-btn continue-link" href="{{ url_for('index') }}">
+            برگشت به صفحه اول
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}تاریخ و ساعت قرار{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="card romantic-card">
+        <div class="badge">ممنونم 💗</div>
+        <h1>ممنون که قرار رو از قبل هماهنگ کردی</h1>
+        <p class="subtitle">اینم تاریخ و ساعت قرارمون:</p>
+
+        <div class="info-box">
+            <div><strong>تاریخ:</strong> {{ date_text }}</div>
+            <div><strong>ساعت:</strong> {{ time_text }}</div>
+        </div>
+
+        <div class="button-row" style="margin-top: 26px;">
+            <a href="{{ url_for('location') }}" class="yes-btn" style="display:inline-block; text-decoration:none;">مکان کافه</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

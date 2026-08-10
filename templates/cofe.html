@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}انتخاب کافه{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="card romantic-card cafe-card">
+        <div class="heart">☕</div>
+
+        <div class="badge">انتخاب مکان قرار</div>
+
+        <h1>پیشنهادت برای کافه چیه؟</h1>
+
+        <p class="subtitle">
+            نام کافه و محله را وارد کن؛ انتخاب لوکیشن روی نقشه اختیاری است.
+        </p>
+
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="{{ url_for('submit_final') }}" method="POST">
+            <input type="hidden" name="date" value="{{ date }}">
+            <input type="hidden" name="time" value="{{ time }}">
+            <input type="hidden" name="latitude" id="latitude" value="">
+            <input type="hidden" name="longitude" id="longitude" value="">
+
+            <div class="cafe-fields">
+                <div class="form-group">
+                    <label for="cafe_name">نام کافه <span class="required-mark">*</span></label>
+                    <input id="cafe_name" type="text" name="cafe_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="cafe_area">محله کافه <span class="required-mark">*</span></label>
+                    <input id="cafe_area" type="text" name="cafe_area" required>
+                </div>
+            </div>
+
+            <div class="cafe-box">
+                <p class="map-title">انتخاب لوکیشن کافه <span class="optional-text">(اختیاری)</span></p>
+                <div id="map"></div>
+            </div>
+
+            <div class="phone-box light-field">
+                <label for="phone">شماره تماس جهت هماهنگی</label>
+                <input id="phone" type="tel" name="phone" value="{{ default_phone }}" required>
+                <small>اگه لازمه می‌تونی تغییرش بدی :)</small>
+            </div>
+
+            <div class="confirm-box">
+                <label class="checkbox-label">
+                    <input type="checkbox" required>
+                    <span>اطلاعات واردشده را تأیید می‌کنم.</span>
+                </label>
+            </div>
+
+            <button type="submit" class="yes-btn full-width">ثبت نهایی قرار 💕</button>
+        </form>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    const map = L.map("map").setView([35.6892, 51.3890], 12);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+    let marker = null;
+    map.on("click", function (e) {
+        if (marker) map.removeLayer(marker);
+        marker = L.marker(e.latlng).addTo(map);
+        document.getElementById("latitude").value = e.latlng.lat.toFixed(6);
+        document.getElementById("longitude").value = e.latlng.lng.toFixed(6);
+    });
+</script>
+{% endblock %}
