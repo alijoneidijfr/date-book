@@ -1,8 +1,18 @@
 services:
   - type: web
-    name: date-booking-demo
+    name: date-booking-site
     runtime: python
-    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
     healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SESSION_COOKIE_SECURE
+        value: "1"
+      - key: DEFAULT_PHONE
+        value: "+989190118068"
